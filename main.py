@@ -60,9 +60,11 @@ def main(dim=10, bombs=10):
     visible_board = [[" " for _ in range(dim)] for _ in range(dim)]
     gameRunning = True
     def check_around(row, col):
+        """print(row,col)"""
         if (row,col) not in board.dug:
             for y in range(max(0,row-1), min(row+1, dim-1)+1):
                 for z in range(max(0,col-1), min(col+1, dim-1)+1):
+                    """print(row,col)"""
                     board.dug.add((row,col))
                     if y == row and z == col:
                         pass
@@ -70,6 +72,7 @@ def main(dim=10, bombs=10):
                         visible_board[y][z] = board.board[y][z]  
                         if board.board[y][z] == 0:
                             check_around(y,z)
+                    """print(board.dug)"""        
                                                              
                             
     while gameRunning:
@@ -82,6 +85,15 @@ def main(dim=10, bombs=10):
         if board.board[row][col] == 0:
             visible_board[row][col] = board.board[row][col]
             check_around(row,col)
+            #check if won
+            win_variable = 0
+            for k in range(dim):
+                for l in range(dim):
+                    if visible_board[k][l] == " ":
+                        win_variable += 1
+            if win_variable == 10:
+                gameRunning=False
+                print("You Won!")     
         elif board.board[row][col] == "*":
             for r in range(dim):
                 for c in range(dim):
@@ -95,10 +107,20 @@ def main(dim=10, bombs=10):
             board.dug.add((row,col))
             #check if the game is over   we probably will need a new variable for this
             #yes we did but we havent been able to think about this problem yet
-        print(board.dug)
+            #check if won
+            win_variable = 0
+            for k in range(dim):
+                for l in range(dim):
+                    if visible_board[k][l] == " ":
+                        win_variable += 1
+            if win_variable == 10:
+                gameRunning=False
+                print("You Won!")
+        """print(board.dug)"""
 
 
 if __name__ == "__main__":
     main()
 
 #there is a problem with recording to the board.dug, i will find it
+#i will use a different method to make the game is available to be finished but later the problem with the board.dug will be solved
