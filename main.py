@@ -60,23 +60,25 @@ def main(dim=10, bombs=10):
     visible_board = [[" " for _ in range(dim)] for _ in range(dim)]
     gameRunning = True
     def check_around(row, col):
-        #return visible_board yerine fonksiyonun direk visible_board üzerinde işlem yapması daha mı kolay olur
-        for y in range(max(0,row-1), min(row+1, dim-1)+1):
-            for z in range(max(0,col-1), min(col+1, dim-1)+1):
-                if y != row and z != col:
-                    if board.board[y][z] == 0:
-                        visible_board[y][z] = board.board[y][z]
-                        check_around(y,z)
+        if (row,col) not in board.dug:
+            for y in range(max(0,row-1), min(row+1, dim-1)+1):
+                for z in range(max(0,col-1), min(col+1, dim-1)+1):
+                    board.dug.add((row,col))
+                    if y == row and z == col:
+                        pass
                     else:
-                        visible_board[y][z] = board.board[y][z]
+                        visible_board[y][z] = board.board[y][z]  
+                        if board.board[y][z] == 0:
+                            check_around(y,z)
+                                                             
+                            
     while gameRunning:
         for x in board.board:
             print(x)
+        print("kiki do you love me")    
         print_board(visible_board)
         row = int(input("enter the row: "))
         col = int(input("enter the column: "))
-    
-
         if board.board[row][col] == 0:
             visible_board[row][col] = board.board[row][col]
             check_around(row,col)
@@ -90,8 +92,13 @@ def main(dim=10, bombs=10):
             gameRunning = False
         else:
             visible_board[row][col] = board.board[row][col]
+            board.dug.add((row,col))
             #check if the game is over   we probably will need a new variable for this
+            #yes we did but we havent been able to think about this problem yet
+        print(board.dug)
 
 
 if __name__ == "__main__":
     main()
+
+#there is a problem with recording to the board.dug, i will find it
